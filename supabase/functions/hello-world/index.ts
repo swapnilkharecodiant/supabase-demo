@@ -1,5 +1,6 @@
 Deno.serve(async (req) => {
-  const { name } = await req.json()
+  const { name } = await req.body;
+  console.log('name :', name);
   const data = {
     message: `Hello ${name}!`,
   }
