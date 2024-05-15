@@ -1,17 +1,20 @@
-// index.js
+require('dotenv').config();
 const supabase = require('./supabaseClient');
 
-async function fetchData() {
-  const { data, error } = await supabase
-    .from('messages')
-    .select('*');
+async function callEdgeFunction() {
+  try {
+    const response = await supabase.functions.invoke('hello-world', {
+      body: { key: 'value' }
+    });
 
-  if (error) {
-    console.error('Error fetching data:', error);
-    return;
+    if (response.error) {
+      throw response.error;
+    }
+
+    console.log('Function response:', response.data);
+  } catch (error) {
+    console.error('Error invoking function:', error);
   }
-
-  console.log('Data:', data);
 }
 
-fetchData();
+callEdgeFunction();
